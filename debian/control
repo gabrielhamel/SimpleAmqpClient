@@ -1,0 +1,59 @@
+Source: libsimpleamqpclient
+Priority: extra
+Maintainer: Fabien Chevalier <fabien.chevalier@ariadnext.com>
+Build-Depends:
+ debhelper (>= 9),
+ cmake (>= 2.8.0),
+ libboost-dev (>= 1.49.0),
+ libboost-chrono-dev (>= 1.49.0),
+ libboost-system-dev (>= 1.49.0),
+ librabbitmq-dev (>= 0.5.2),
+ libssl-dev (>= 1.0.0),
+ doxygen
+Standards-Version: 3.9.3
+Section: libs
+Homepage: https://github.com/alanxz/SimpleAmqpClient
+
+Package: libsimpleamqpclient-dev
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: libsimpleamqpclient1 (= ${binary:Version}), ${misc:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Description: C++ wrapper around the rabbitmq-c library
+ SimpleAmqpClient is an easy-to-use C++ wrapper around the rabbitmq-c C
+ library. It derives inspiration from the puka AMQP library in that it
+ abstracts away the underlying AMQP wire concept of channels and uses them as
+ an error/consumer scope. This should make writing simple single-threaded
+ AMQP-enabled apps easy.
+
+Package: libsimpleamqpclient-dbg
+Section: debug
+Architecture: any
+Multi-Arch: same
+Depends: libsimpleamqpclient1 (= ${binary:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Description: C++ wrapper around the rabbitmq-c library
+ SimpleAmqpClient is an easy-to-use C++ wrapper around the rabbitmq-c C
+ library. It derives inspiration from the puka AMQP library in that it
+ abstracts away the underlying AMQP wire concept of channels and uses them as
+ an error/consumer scope. This should make writing simple single-threaded
+ AMQP-enabled apps easy.
+ .
+ This package provides debugging symbols.
+
+Package: libsimpleamqpclient1
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Description: C++ wrapper around the rabbitmq-c library
+ SimpleAmqpClient is an easy-to-use C++ wrapper around the rabbitmq-c C      
+ library. It derives inspiration from the puka AMQP library in that it       
+ abstracts away the underlying AMQP wire concept of channels and uses them as 
+ an error/consumer scope. This should make writing simple single-threaded    
+ AMQP-enabled apps easy.
+

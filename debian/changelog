@@ -1,0 +1,5 @@
+libsimpleamqpclient (2.4.0-axt1) unstable; urgency=low
+
+  * Initial release
+
+ -- Fabien Chevalier <fabien.chevalier@ariadnext.com>  Sun, 12 Apr 2015 14:47:51 +0000
