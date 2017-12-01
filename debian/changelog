@@ -1,8 +1,17 @@
-libsimpleamqpclient (2.4.0+axt2) UNRELEASED; urgency=low
+libsimpleamqpclient (2.4.0+axt3) unstable; urgency=medium
 
+  [ Fabien Chevalier ]
   * Update SSL API after pull request review
 
- -- Fabien Chevalier <fabien.chevalier@ariadnext.com>  Mon, 20 Apr 2015 15:19:22 +0000
+  [ Baptiste Poirriez ]
+  * Cleaning debian dir
+
+  [ Sebastien Baguet ]
+  * Parallel build
+
+  [ root ]
+
+ -- root <root@irma-dev2.rennes.ariadnext.com>  Fri, 01 Dec 2017 10:33:24 +0100
 
 libsimpleamqpclient (2.4.0-axt1) unstable; urgency=low
 
