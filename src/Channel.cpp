@@ -95,7 +95,10 @@ Channel::ptr_t Channel::CreateSecureFromUri(const std::string &uri,
                                       const std::string &path_to_client_key,
                                       const std::string &path_to_client_cert,
                                       bool verify_hostname,
-                                      int frame_max)
+                                      int frame_max,
+                                      bool sslRestrict,
+                                      amqp_tls_version_t min,
+                                      amqp_tls_version_t max)
 {
     amqp_connection_info info;
     amqp_default_connection_info(&info);
@@ -118,7 +121,10 @@ Channel::ptr_t Channel::CreateSecureFromUri(const std::string &uri,
                       std::string(info.password),
                       std::string(info.vhost),
                       frame_max,
-                      verify_hostname);
+                      verify_hostname,
+                      sslRestrict,
+                      min,
+                      max);
     }
     else
     {
@@ -178,6 +184,9 @@ Channel::Channel(const std::string &host,
     if (NULL == socket)
     {
         throw std::bad_alloc();
+    }
+    if (ssl_params.sslRestrict) {
+        amqp_ssl_socket_set_ssl_versions(socket, ssl_params.sslMin, ssl_params.sslMax);
     }
     amqp_ssl_socket_set_verify(socket, ssl_params.verify_hostname);
 
