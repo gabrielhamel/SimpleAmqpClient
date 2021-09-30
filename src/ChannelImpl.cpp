@@ -48,8 +48,6 @@
 
 #include <string.h>
 
-#define BROKER_HEARTBEAT 0
-
 namespace AmqpClient
 {
 namespace Detail
@@ -67,7 +65,7 @@ ChannelImpl::~ChannelImpl()
 }
 
 void ChannelImpl::DoLogin(const std::string &username,
-        const std::string &password, const std::string &vhost, int frame_max)
+        const std::string &password, const std::string &vhost, int frame_max, int heartbeat)
 {
     amqp_table_entry_t capabilties[1];
     amqp_table_entry_t capability_entry;
@@ -87,7 +85,7 @@ void ChannelImpl::DoLogin(const std::string &username,
     client_properties.entries = &capability_entry;
 
     CheckRpcReply(0, amqp_login_with_properties(m_connection, vhost.c_str(), 0,
-                frame_max, BROKER_HEARTBEAT, &client_properties,
+                frame_max, heartbeat, &client_properties,
                 AMQP_SASL_METHOD_PLAIN, username.c_str(), password.c_str()));
 }
 
