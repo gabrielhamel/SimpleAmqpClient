@@ -83,6 +83,7 @@ public:
       * @param channel_max Request that the server limit the number of channels for
       * this connection to the specified parameter, a value of zero will use the broker-supplied value
       * @param frame_max Request that the server limit the maximum size of any frame to this value
+      * @param heartbeat The dead connection timeout, a value of zero will disable detection
       * @return a new Channel object pointer
       */
     static ptr_t Create(const std::string &host = "127.0.0.1",
@@ -90,9 +91,10 @@ public:
                         const std::string &username = "guest",
                         const std::string &password = "guest",
                         const std::string &vhost = "/",
-                        int frame_max = 131072)
+                        int frame_max = 131072,
+                        int heartbeat = 0)
     {
-        return boost::make_shared<Channel>(host, port, username, password, vhost, frame_max);
+        return boost::make_shared<Channel>(host, port, username, password, vhost, frame_max, heartbeat);
     }
 
 protected:
@@ -127,7 +129,7 @@ public:
     * @param sslRestrict Restrict tls versions
     * @param min min version to restrict to
     * @param max max version to restrict to
-    *
+    * @param heartbeat The dead connection timeout, a value of zero will disable detection
     * @return a new Channel object pointer
     */
 
@@ -143,7 +145,8 @@ public:
                               bool verify_hostname = true,
                               bool sslRestrict = false,
                               amqp_tls_version_t min = AMQP_TLSv1,
-                              amqp_tls_version_t max = AMQP_TLSvLATEST)
+                              amqp_tls_version_t max = AMQP_TLSvLATEST,
+                              int heartbeat = 0)
     {
         SSLConnectionParams ssl_params;
         ssl_params.path_to_ca_cert = path_to_ca_cert;
@@ -160,7 +163,8 @@ public:
                                            password,
                                            vhost,
                                            frame_max,
-                                           ssl_params);
+                                           ssl_params,
+                                           heartbeat);
     }
 
 
@@ -169,9 +173,10 @@ public:
      *
      * @param uri [in] a URI of the form: amqp://[username:password@]{HOSTNAME}[:PORT][/VHOST]
      * @param frame_max [in] requests that the broker limit the maximum size of any frame to this value
+     * @param heartbeat The dead connection timeout, a value of zero will disable detection
      * @returns a new Channel object
      */
-    static ptr_t CreateFromUri(const std::string &uri, int frame_max = 131072);
+    static ptr_t CreateFromUri(const std::string &uri, int frame_max = 131072, int heartbeat = 0);
 
     /**
      * Create a new Channel object from an AMQP URI, secured with SSL.
@@ -184,10 +189,12 @@ public:
      * @param path_to_client_cert Path to client certificate file
      * @param verify_hostname Verify the hostname against the certificate when
      * opening the SSL connection.
-     * * @param frame_max [in] requests that the broker limit the maximum size of any frame to this value
+     * @param frame_max [in] requests that the broker limit the maximum size of any frame to this value
      * @param sslRestrict Restrict tls versions
      * @param min min version to restrict to
      * @param max max version to restrict to
+     * @param frame_max [in] requests that the broker limit the maximum size of any frame to this value
+     * @param heartbeat The dead connection timeout, a value of zero will disable detection
      * @returns a new Channel object
      */
     static ptr_t CreateSecureFromUri(const std::string &uri,
@@ -198,14 +205,8 @@ public:
                                int frame_max = 131072,
                                bool sslRestrict = false,
                                amqp_tls_version_t min = AMQP_TLSv1,
-                               amqp_tls_version_t max = AMQP_TLSvLATEST);
-
-    explicit Channel(const std::string &host,
-                     int port,
-                     const std::string &username,
-                     const std::string &password,
-                     const std::string &vhost,
-                     int frame_max);
+                               amqp_tls_version_t max = AMQP_TLSvLATEST,
+                               int heartbeat = 0);
 
     explicit Channel(const std::string &host,
                      int port,
@@ -213,7 +214,16 @@ public:
                      const std::string &password,
                      const std::string &vhost,
                      int frame_max,
-                     const SSLConnectionParams &ssl_params);
+                     int heartbeat = 0);
+
+    explicit Channel(const std::string &host,
+                     int port,
+                     const std::string &username,
+                     const std::string &password,
+                     const std::string &vhost,
+                     int frame_max,
+                     const SSLConnectionParams &ssl_params,
+                     int heartbeat = 0);
 
 
 public:

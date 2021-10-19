@@ -70,7 +70,7 @@ const std::string Channel::EXCHANGE_TYPE_DIRECT("direct");
 const std::string Channel::EXCHANGE_TYPE_FANOUT("fanout");
 const std::string Channel::EXCHANGE_TYPE_TOPIC("topic");
 
-Channel::ptr_t Channel::CreateFromUri(const std::string &uri, int frame_max)
+Channel::ptr_t Channel::CreateFromUri(const std::string &uri, int frame_max, int heartbeat)
 {
     amqp_connection_info info;
     amqp_default_connection_info(&info);
@@ -87,7 +87,8 @@ Channel::ptr_t Channel::CreateFromUri(const std::string &uri, int frame_max)
                   std::string(info.user),
                   std::string(info.password),
                   std::string(info.vhost),
-                  frame_max);
+                  frame_max,
+                  heartbeat);
 }
 
 Channel::ptr_t Channel::CreateSecureFromUri(const std::string &uri,
@@ -98,7 +99,8 @@ Channel::ptr_t Channel::CreateSecureFromUri(const std::string &uri,
                                       int frame_max,
                                       bool sslRestrict,
                                       amqp_tls_version_t min,
-                                      amqp_tls_version_t max)
+                                      amqp_tls_version_t max,
+                                      int heartbeat)
 {
     amqp_connection_info info;
     amqp_default_connection_info(&info);
@@ -124,7 +126,8 @@ Channel::ptr_t Channel::CreateSecureFromUri(const std::string &uri,
                       verify_hostname,
                       sslRestrict,
                       min,
-                      max);
+                      max,
+                      heartbeat);
     }
     else
     {
@@ -137,7 +140,8 @@ Channel::Channel(const std::string &host,
                  const std::string &username,
                  const std::string &password,
                  const std::string &vhost,
-                 int frame_max) :
+                 int frame_max,
+                 int heartbeat) :
     m_impl(new Detail::ChannelImpl)
 {
     m_impl->m_connection = amqp_new_connection();
@@ -153,7 +157,7 @@ Channel::Channel(const std::string &host,
         int sock = amqp_socket_open(socket, host.c_str(), port);
         m_impl->CheckForError(sock);
 
-        m_impl->DoLogin(username, password, vhost, frame_max);
+        m_impl->DoLogin(username, password, vhost, frame_max, heartbeat);
     }
     catch (...)
     {
@@ -171,7 +175,8 @@ Channel::Channel(const std::string &host,
                  const std::string &password,
                  const std::string &vhost,
                  int frame_max,
-                 const SSLConnectionParams &ssl_params)
+                 const SSLConnectionParams &ssl_params,
+                 int heartbeat)
     : m_impl(new Detail::ChannelImpl)
 {
     m_impl->m_connection = amqp_new_connection();
@@ -216,7 +221,7 @@ Channel::Channel(const std::string &host,
             throw std::runtime_error("Error in opening SSL/TLS connection for socket");
         }
 
-        m_impl->DoLogin(username, password, vhost, frame_max);
+        m_impl->DoLogin(username, password, vhost, frame_max, heartbeat);
     }
     catch (...)
     {
