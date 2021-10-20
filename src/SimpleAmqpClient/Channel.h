@@ -42,6 +42,7 @@
 #include <boost/make_shared.hpp>
 #include <string>
 #include <vector>
+#include <amqp_ssl_socket.h>
 
 #ifdef _MSC_VER
 # pragma warning ( push )
@@ -102,6 +103,9 @@ protected:
         std::string path_to_client_key;
         std::string path_to_client_cert;
         bool verify_hostname;
+        bool sslRestrict;
+        amqp_tls_version_t sslMin;
+        amqp_tls_version_t sslMax;
     };
 
 public:
@@ -122,6 +126,9 @@ public:
     * @param frame_max Request that the server limit the maximum size of any frame to this value
     * @param verify_host Verify the hostname against the certificate when
     * opening the SSL connection.
+    * @param sslRestrict Restrict tls versions
+    * @param min min version to restrict to
+    * @param max max version to restrict to
     * @param heartbeat The dead connection timeout, a value of zero will disable detection
     * @return a new Channel object pointer
     */
@@ -136,6 +143,9 @@ public:
                               const std::string &vhost = "/",
                               int frame_max = 131072,
                               bool verify_hostname = true,
+                              bool sslRestrict = false,
+                              amqp_tls_version_t min = AMQP_TLSv1,
+                              amqp_tls_version_t max = AMQP_TLSvLATEST,
                               int heartbeat = 0)
     {
         SSLConnectionParams ssl_params;
@@ -143,6 +153,9 @@ public:
         ssl_params.path_to_client_key = path_to_client_key;
         ssl_params.path_to_client_cert = path_to_client_cert;
         ssl_params.verify_hostname = verify_hostname;
+        ssl_params.sslRestrict = sslRestrict;
+        ssl_params.sslMin = min;
+        ssl_params.sslMax = max;
 
         return boost::make_shared<Channel>(host,
                                            port,
@@ -177,6 +190,10 @@ public:
      * @param verify_hostname Verify the hostname against the certificate when
      * opening the SSL connection.
      * @param frame_max [in] requests that the broker limit the maximum size of any frame to this value
+     * @param sslRestrict Restrict tls versions
+     * @param min min version to restrict to
+     * @param max max version to restrict to
+     * @param frame_max [in] requests that the broker limit the maximum size of any frame to this value
      * @param heartbeat The dead connection timeout, a value of zero will disable detection
      * @returns a new Channel object
      */
@@ -186,6 +203,9 @@ public:
                                const std::string &path_to_client_cert="",
                                bool verify_hostname = true,
                                int frame_max = 131072,
+                               bool sslRestrict = false,
+                               amqp_tls_version_t min = AMQP_TLSv1,
+                               amqp_tls_version_t max = AMQP_TLSvLATEST,
                                int heartbeat = 0);
 
     explicit Channel(const std::string &host,
