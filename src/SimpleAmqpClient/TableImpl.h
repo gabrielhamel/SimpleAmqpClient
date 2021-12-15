@@ -38,7 +38,7 @@
 #include <string>
 #include <vector>
 
-#include <amqp.h>
+#include <rabbitmq-c/amqp.h>
 
 namespace AmqpClient
 {

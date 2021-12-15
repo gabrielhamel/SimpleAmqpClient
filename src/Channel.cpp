@@ -28,11 +28,11 @@
  */
 
 // Put these first to avoid warnings about INT#_C macro redefinition
-#include <amqp.h>
-#include <amqp_framing.h>
-#include <amqp_tcp_socket.h>
+#include <rabbitmq-c/amqp.h>
+#include <rabbitmq-c/framing.h>
+#include <rabbitmq-c/tcp_socket.h>
 #ifdef SAC_SSL_SUPPORT_ENABLED
-# include <amqp_ssl_socket.h>
+# include <rabbitmq-c/ssl_socket.h>
 #endif
 
 #include "SimpleAmqpClient/Channel.h"
@@ -55,13 +55,14 @@
 #include <vector>
 
 #include <boost/array.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/chrono.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/limits.hpp>
 
 #include <string.h>
 
+using namespace boost::placeholders;
 
 namespace AmqpClient
 {
@@ -193,7 +194,7 @@ Channel::Channel(const std::string &host,
     if (ssl_params.sslRestrict) {
         amqp_ssl_socket_set_ssl_versions(socket, ssl_params.sslMin, ssl_params.sslMax);
     }
-    amqp_ssl_socket_set_verify(socket, ssl_params.verify_hostname);
+    amqp_ssl_socket_set_verify_hostname(socket, ssl_params.verify_hostname);
 
     try
     {

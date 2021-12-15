@@ -30,8 +30,8 @@
  */
 
 // Put these first to avoid warnings about INT#_C macro redefinition
-#include <amqp.h>
-#include <amqp_framing.h>
+#include <rabbitmq-c/amqp.h>
+#include <rabbitmq-c/framing.h>
 
 #include "SimpleAmqpClient/AmqpException.h"
 #include "SimpleAmqpClient/BasicMessage.h"
@@ -40,12 +40,14 @@
 #include "SimpleAmqpClient/MessageReturnedException.h"
 
 #include <boost/array.hpp>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/chrono.hpp>
 #include <boost/noncopyable.hpp>
 
 #include <map>
 #include <vector>
+
+using namespace boost::placeholders;
 
 namespace AmqpClient
 {

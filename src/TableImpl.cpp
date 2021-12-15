@@ -37,7 +37,7 @@
 #include <boost/variant/apply_visitor.hpp>
 #include <boost/variant/static_visitor.hpp>
 
-#include <amqp.h>
+#include <rabbitmq-c/amqp.h>
 
 #include <string.h>
 

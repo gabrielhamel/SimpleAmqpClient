@@ -28,8 +28,8 @@
  */
 
 // Put these first to avoid warnings about INT#_C macro redefinition
-#include <amqp.h>
-#include <amqp_framing.h>
+#include <rabbitmq-c/amqp.h>
+#include <rabbitmq-c/framing.h>
 
 #include "SimpleAmqpClient/BasicMessage.h"
 #include "SimpleAmqpClient/TableImpl.h"

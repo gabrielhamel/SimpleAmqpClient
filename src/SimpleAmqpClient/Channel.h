@@ -42,7 +42,7 @@
 #include <boost/make_shared.hpp>
 #include <string>
 #include <vector>
-#include <amqp_ssl_socket.h>
+#include <rabbitmq-c/ssl_socket.h>
 
 #ifdef _MSC_VER
 # pragma warning ( push )
